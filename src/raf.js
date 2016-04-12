@@ -49,15 +49,12 @@ export default {
     let update = {
       x: this.invert_.x * (1 - remappedTime),
       y: this.invert_.y * (1 - remappedTime),
-      sx: this.invert_.sx + (1 - this.invert_.sx) * remappedTime,
-      sy: this.invert_.sy + (1 - this.invert_.sy) * remappedTime,
       a: this.first_.opacity + (this.invert_.a) * remappedTime
     };
 
     if (this.updateTransform_) {
       this.element_.style.transform =
-        `translate(${update.x}px, ${update.y}px)
-         scale(${update.sx}, ${update.sy})`;
+        `translate(${update.x}px, ${update.y}px)`;
     }
 
     if (this.updateOpacity_) {

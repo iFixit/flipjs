@@ -1,3 +1,80 @@
+// From es6-object-assign (MIT license)
+// @see https://github.com/rubennorte/es6-object-assign/blob/master/src/index.js
+function assign(target, firstSource) {
+  if (target === undefined || target === null) {
+    throw new TypeError('Cannot convert first argument to object');
+  }
+
+  var to = Object(target);
+  for (var i = 1; i < arguments.length; i++) {
+    var nextSource = arguments[i];
+    if (nextSource === undefined || nextSource === null) {
+      continue;
+    }
+
+    var keysArray = Object.keys(Object(nextSource));
+    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+      var nextKey = keysArray[nextIndex];
+      var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+      if (desc !== undefined && desc.enumerable) {
+        to[nextKey] = nextSource[nextKey];
+      }
+    }
+  }
+  return to;
+}
+
+if (!Object.assign) {
+  Object.defineProperty(Object, 'assign', {
+    enumerable: false,
+    configurable: true,
+    writable: true,
+    value: assign
+  });
+}
+
+
+(function () {
+
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+
+// performance.now()-polyfill.js (MIT licsense)
+// @see https://gist.github.com/paulirish/5438650
+(function(){
+  if ("performance" in window == false) {
+      window.performance = {};
+  }
+
+  Date.now = (Date.now || function () {  // thanks IE8
+	  return new Date().getTime();
+  });
+
+  if ("now" in window.performance == false){
+
+    var nowOffset = Date.now();
+
+    if (performance.timing && performance.timing.navigationStart){
+      nowOffset = performance.timing.navigationStart
+    }
+
+    window.performance.now = function now(){
+      return Date.now() - nowOffset;
+    }
+  }
+})();
+
 /**
  * Copyright 2016 Google Inc. All rights reserved.
  *
@@ -304,16 +381,13 @@ export default class FLIP {
     // Update the invert values.
     this.invert_.x = this.first_.layout.left - this.last_.layout.left;
     this.invert_.y = this.first_.layout.top - this.last_.layout.top;
-    this.invert_.sx = this.first_.layout.width / this.last_.layout.width;
-    this.invert_.sy = this.first_.layout.height / this.last_.layout.height;
     this.invert_.a = this.last_.opacity - this.first_.opacity;
 
     // Apply the transform.
     if (this.updateTransform_) {
       this.element_.style.transformOrigin = '0 0';
       this.element_.style.transform =
-          `translate(${this.invert_.x}px, ${this.invert_.y}px)
-           scale(${this.invert_.sx}, ${this.invert_.sy})`;
+          `translate(${this.invert_.x}px, ${this.invert_.y}px)`;
 
       willChange.push('transform');
     }
