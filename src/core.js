@@ -385,8 +385,8 @@ export default class FLIP {
 
     // Apply the transform.
     if (this.updateTransform_) {
-      this.element_.style.transformOrigin = '0 0';
-      this.element_.style.transform =
+      this.element_.style.transformOrigin = this.element_.style.webkitTransformOrigin = '0 0';
+      this.element_.style.transform = this.element_.style.webkitTransform = 
           `translate(${this.invert_.x}px, ${this.invert_.y}px)`;
 
       willChange.push('transform');
@@ -463,8 +463,8 @@ export default class FLIP {
    * @private
    */
   removeTransformsAndOpacity_ () {
-    this.element_.style.transformOrigin = null;
-    this.element_.style.transform = null;
+    this.element_.style.transformOrigin = this.element_.style.webkitTransformOrigin = null;
+    this.element_.style.transform = this.element_.style.webkitTransform = null;
     this.element_.style.opacity = null;
     this.element_.style.willChange = null;
   }

@@ -32,6 +32,8 @@ export default {
     else
       this.start_ = startTime + this.delay_;
 
+    this.style_ = this.element_.style;
+
     requestAnimationFrame(this.update_);
   },
 
@@ -53,12 +55,12 @@ export default {
     };
 
     if (this.updateTransform_) {
-      this.element_.style.transform =
+      this.style_.transform = this.style_.webkitTransform =
         `translate(${update.x}px, ${update.y}px)`;
     }
 
     if (this.updateOpacity_) {
-      this.element_.style.opacity = update.a;
+      this.style_.opacity = update.a;
     }
 
     if (time < 1) {
