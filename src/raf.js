@@ -34,6 +34,8 @@ export default {
 
     this.style_ = this.element_.style;
 
+    this.element_.classList.add('flip-animating');
+
     requestAnimationFrame(this.update_);
   },
 
